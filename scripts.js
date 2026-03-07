@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (viewName === 'Ventas') {
                     initSalesChart();
+                    initSalesCircularChart();
                 } else if (viewName === 'Clientes') {
                     initClientsChart();
                 }
@@ -77,19 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addMessage(target, sender, text) {
         const msgDiv = document.createElement('div');
-        msgDiv.style.marginBottom = '12px';
-        msgDiv.style.padding = '10px 15px';
-        msgDiv.style.borderRadius = '10px';
-        msgDiv.style.fontSize = '12px';
         msgDiv.className = sender === 'user' ? 'message-user' : 'message-ai';
 
         if (sender === 'user') {
-            msgDiv.style.background = 'rgba(255,255,255,0.05)';
-            msgDiv.style.marginLeft = 'auto';
-            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block; font-size:10px;">MARISKE</span>${text}`;
+            msgDiv.innerHTML = `<span class="message-label">USER</span>${text}`;
         } else {
-            msgDiv.style.background = 'rgba(191,255,0,0.05)';
-            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block; font-size:10px;">CEREBRO COCINA&CIA</span>${text}`;
+            msgDiv.innerHTML = `<span class="message-label">CEREBRO</span>${text}`;
         }
         target.appendChild(msgDiv);
         target.scrollTop = target.scrollHeight;
@@ -98,9 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateAIResponse(query, context) {
         const q = query.toLowerCase();
         if (context === 'Ventas') {
-            if (q.includes('peor') || q.includes('lentejas')) return "Según 04_Market_Intelligence, las lentejas tienen baja rotación los fines de semana. Sugiero combo con bebida artesanal.";
-            if (q.includes('mejor') || q.includes('curry')) return "El Pollo al Curry tiene un margen del 38%. Es tu caballo de batalla.";
-            return "Analizando tendencias de mercado (04) para optimizar tus ventas...";
+            if (q.includes('peor') || q.includes('lentejas')) return "Según 04_Market_Intelligence, las lentejas tienen baja rotación los fines de semana. Sugiero ofrecerlas como 'Plato de Nutrición Consciente' con descuento del 15% los lunes.";
+            if (q.includes('mejor') || q.includes('curry')) return "El Pollo al Curry tiene un margen del 38% y es el plato más vendido los fines de semana. Podríamos subir un 5% el precio sin afectar volumen.";
+            return "Analizando tendencias de mercado (04) para optimizar tus ventas... Detecto oportunidad en bebidas artesanales.";
         }
         if (q.includes('margen')) return "Analizando 01_Market_Intelligence... Riesgo detectado en Pollo al Curry (Margen: 26%).";
         if (q.includes('ventas')) return "Ventas subieron un 12% este mes. Estos datos provienen de 04_Market_Intelligence.";
@@ -116,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'Auditoría': "🔍 Auditoría completada. Margen global estable al 32%.",
             'Cierre': "📝 Cierre registrado. Archivo 03_Operational_Log actualizado."
         };
-        addMessage('ai', messages[action]);
+        const output = document.getElementById('chat-output');
+        addMessage(output, 'ai', messages[action]);
     };
 
     // Chart.js Implementation
@@ -141,10 +136,35 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
                     y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#999' } },
                     x: { grid: { display: false }, ticks: { color: '#999' } }
+                }
+            }
+        });
+    }
+
+    let salesCircularChartInstance = null;
+    function initSalesCircularChart() {
+        if (salesCircularChartInstance) return;
+        const ctx = document.getElementById('salesCircularChart').getContext('2d');
+        salesCircularChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Proteínas', 'Bebidas', 'Postres', 'Otros'],
+                datasets: [{
+                    data: [55, 25, 12, 8],
+                    backgroundColor: ['#BFFF00', 'rgba(191, 255, 0, 0.7)', 'rgba(191, 255, 0, 0.4)', 'rgba(191, 255, 0, 0.1)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#999', boxWidth: 10, font: { size: 10 } } }
                 }
             }
         });
