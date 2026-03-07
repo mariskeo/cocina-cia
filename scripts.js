@@ -83,8 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateAIResponse(query) {
         const q = query.toLowerCase();
         if (q.includes('margen')) return "Analizando 01_Market_Intelligence... Riesgo detectado en Pollo al Curry (Margen: 26%).";
-        if (q.includes('ventas')) return "Ventas subieron un 12% este mes. Revisa la sección 'Ventas' para el gráfico detallado.";
-        return "Procesando datos maestros para responder a: " + query;
+        if (q.includes('ventas')) return "Ventas subieron un 12% este mes. Estos datos provienen de 04_Market_Intelligence. He actualizado el gráfico en la sección 'Ventas'.";
+        if (q.includes('cliente') || q.includes('base')) return "Consultando 05_Client_Base... Tienes 150 clientes activos con una recurrencia del 22%.";
+        return "Procesando datos maestros (00-05) para responder a: " + query;
     }
 
     // Smart Actions
