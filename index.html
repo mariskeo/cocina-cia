@@ -213,20 +213,21 @@
             </div>
 
             <!-- Brain Interaction in Sales View -->
-            <div class="chat-container brain-sales" style="height: 300px; display: flex; flex-direction: column;">
-                <div class="console-header">
-                    <i class="fas fa-microchip"></i> Consulta Brain (Ventas/Mercado)
-                </div>
-                <div id="chat-output-sales" class="chat-output" style="flex: 1; overflow-y: auto; padding: 15px;">
-                    <div class="chat-welcome">¿Cómo podemos optimizar el plato menos vendido usando
-                        04_Market_Intelligence?</div>
-                </div>
-                <form id="console-form-sales" class="console-form">
-                    <input type="text" id="user-input-sales" placeholder="Pregunta sobre tendencias o rentabilidad..."
-                        autocomplete="off">
-                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                </form>
-            </div>
+            <div class="dashboard-grid">
+                <!-- Left: Console & Actions -->
+                <div class="left-panel">
+                    <div class="console-container">
+                        <div class="chat-box" id="chat-output">
+                            <div class="chat-welcome">
+                                <i class="fas fa-brain"></i>
+                                <p>Cerebro <strong>COCINA&CIA</strong></p>
+                            </div>
+                        </div>
+                        <form class="input-area" id="console-form">
+                            <input type="text" class="console-input" id="user-input" placeholder="Pregunta a la IA...">
+                            <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
         </section>
 
         <!-- Clients View -->
