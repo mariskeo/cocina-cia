@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (viewName === 'Ventas') {
                     initSalesChart();
-                    initSalesCircularChart();
                 } else if (viewName === 'Clientes') {
                     initClientsChart();
                 }
