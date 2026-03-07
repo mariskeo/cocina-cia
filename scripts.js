@@ -2,23 +2,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const consoleForm = document.getElementById('console-form');
     const userInput = document.getElementById('user-input');
     const chatOutput = document.getElementById('chat-output');
-    const iaAlert = document.getElementById('ia-alert');
+    const actionHistory = document.getElementById('action-history');
 
-    // Simulating IA interaction
+    // Navigation Logic
+    const navLinks = document.querySelectorAll('.nav-link');
+    const views = {
+        'Tablero': document.getElementById('view-dashboard'),
+        'Ventas': document.getElementById('view-sales')
+    };
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const viewName = link.textContent.trim();
+            if (views[viewName]) {
+                e.preventDefault();
+                // Update active link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                // Switch views
+                Object.values(views).forEach(v => v.classList.remove('active'));
+                views[viewName].classList.add('active');
+
+                if (viewName === 'Ventas') {
+                    initSalesChart();
+                }
+            }
+        });
+    });
+
+    // Action History Helper
+    function logToHistory(text) {
+        const li = document.createElement('li');
+        li.className = 'history-item';
+        const now = new Date();
+        const timeStr = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+        li.innerHTML = `<span>${text}</span><span class="history-time">${timeStr}</span>`;
+        actionHistory.prepend(li); // Newest on top
+        if (actionHistory.children.length > 5) actionHistory.lastChild.remove();
+    }
+
+    // AI Chat Logic
     consoleForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const query = userInput.value.trim();
         if (!query) return;
 
-        // Clear welcome message if first chat
-        if (chatOutput.querySelector('.chat-welcome')) {
-            chatOutput.innerHTML = '';
-        }
+        if (chatOutput.querySelector('.chat-welcome')) chatOutput.innerHTML = '';
 
         addMessage('user', query);
+        logToHistory(`Consulta IA: "${query.substring(0, 20)}..."`);
         userInput.value = '';
 
-        // Simulate thinking and response
         setTimeout(() => {
             const response = generateAIResponse(query);
             addMessage('ai', response);
@@ -27,70 +62,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addMessage(sender, text) {
         const msgDiv = document.createElement('div');
-        msgDiv.style.marginBottom = '15px';
-        msgDiv.style.padding = '12px 18px';
-        msgDiv.style.borderRadius = '12px';
-        msgDiv.style.fontSize = '14px';
-        msgDiv.style.lineHeight = '1.5';
-        msgDiv.style.maxWidth = '85%';
+        msgDiv.style.marginBottom = '12px';
+        msgDiv.style.padding = '10px 15px';
+        msgDiv.style.borderRadius = '10px';
+        msgDiv.style.fontSize = '13px';
+        msgDiv.className = sender === 'user' ? 'message-user' : 'message-ai';
 
         if (sender === 'user') {
             msgDiv.style.background = 'rgba(255,255,255,0.05)';
             msgDiv.style.marginLeft = 'auto';
-            msgDiv.style.border = '1px solid rgba(255,255,255,0.1)';
-            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block; margin-bottom:5px;">MARISKE</span>${text}`;
+            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block;">MARISKE</span>${text}`;
         } else {
             msgDiv.style.background = 'rgba(191,255,0,0.05)';
-            msgDiv.style.border = '1px solid rgba(191,255,0,0.1)';
-            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block; margin-bottom:5px;">CEREBRO COCINA&CIA</span>${text}`;
+            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block;">CEREBRO COCINA&CIA</span>${text}`;
         }
-
         chatOutput.appendChild(msgDiv);
         chatOutput.scrollTop = chatOutput.scrollHeight;
     }
 
     function generateAIResponse(query) {
         const q = query.toLowerCase();
-        if (q.includes('margen')) {
-            return "Analizando 01_Market_Intelligence... El margen promedio actual es del 32%. He detectado un riesgo en el Pollo al Curry por el aumento del 12% en el proveedor de proteína.";
-        } else if (q.includes('producción') || q.includes('plan')) {
-            return "Revisando pedidos en 00_Core_Logic. He generado una proyección de 145 porciones para el turno de almuerzo. Consulta el 02_Production_Playbook para el mise en place.";
-        } else if (q.includes('merma')) {
-            return "La desviación de mermas según el 03_Operational_Log es del 5%. Estamos bajo el límite teórico del 10%. Buen trabajo de control operativo.";
-        }
-        return "He recibido tu consulta sobre '" + query + "'. Estoy procesando los datos de tus 4 archivos maestros para darte una respuesta basada en evidencia.";
+        if (q.includes('margen')) return "Analizando 01_Market_Intelligence... Riesgo detectado en Pollo al Curry (Margen: 26%).";
+        if (q.includes('ventas')) return "Ventas subieron un 12% este mes. Revisa la sección 'Ventas' para el gráfico detallado.";
+        return "Procesando datos maestros para responder a: " + query;
     }
 
     // Smart Actions
     window.triggerAction = (action) => {
-        if (chatOutput.querySelector('.chat-welcome')) {
-            chatOutput.innerHTML = '';
-        }
-
-        let message = "";
-        switch (action) {
-            case 'Producción':
-                message = "⚙️ **Generando Plan de Producción...** Basándome en los pedidos de la semana, he calculado que necesitas preparar 18kg de base para Curry.";
-                break;
-            case 'Auditoría':
-                message = "🔍 **Iniciando Auditoría de Costos...** Comparando 01 (Precios Mercado) con 02 (Escandallos). No hay incrementos críticos fuera del Pollo ya reportado.";
-                break;
-            case 'Cierre':
-                message = "📝 **Cierre de Turno activado.** Abriendo el 03_Operational_Log para tu registro. Recuerda anotar la merma detectada hoy.";
-                break;
-        }
-        addMessage('ai', message);
+        logToHistory(`Acción: ${action} ejecutada`);
+        const messages = {
+            'Producción': "⚙️ Plan generado: 18kg de base para Curry necesarios.",
+            'Auditoría': "🔍 Auditoría completada. Margen global estable al 32%.",
+            'Cierre': "📝 Cierre registrado. Archivo 03_Operational_Log actualizado."
+        };
+        addMessage('ai', messages[action]);
     };
 
-    // Micro-animations for KPI cards
-    const cards = document.querySelectorAll('.kpi-card');
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, 100 * index);
-    });
+    // Chart.js Implementation
+    let salesChartInstance = null;
+    function initSalesChart() {
+        if (salesChartInstance) return;
+
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        salesChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
+                datasets: [{
+                    label: 'Ventas (COP)',
+                    data: [1200, 1900, 1500, 2500, 3200, 4100, 3800],
+                    borderColor: '#BFFF00',
+                    backgroundColor: 'rgba(191, 255, 0, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#999' } },
+                    x: { grid: { display: false }, ticks: { color: '#999' } }
+                }
+            }
+        });
+    }
 });

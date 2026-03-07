@@ -65,7 +65,6 @@
 
     <!-- Main Content Area -->
     <main class="main-layout">
-        <!-- Top Bar with Alert -->
         <header class="top-bar">
             <div class="ia-notif" id="ia-alert">
                 <i class="fas fa-robot"></i>
@@ -79,106 +78,102 @@
             </div>
         </header>
 
-        <!-- Dynamic Grid -->
-        <section class="dashboard-grid">
-            <!-- Left Column: KPIs and Console -->
-            <div class="left-panel">
-                <div class="kpi-row">
-                    <!-- KPI 1 -->
-                    <div class="kpi-card">
-                        <span class="kpi-label">Margen de Contribución</span>
-                        <div class="kpi-value">32%</div>
-                        <div class="kpi-trend up">
-                            <i class="fas fa-arrow-up"></i> +2.5% vs semana pasada
-                        </div>
-                    </div>
-                    <!-- KPI 2 -->
-                    <div class="kpi-card">
-                        <span class="kpi-label">Costo de Alimento</span>
-                        <div class="kpi-value">18%</div>
-                        <div class="kpi-trend down">
-                            <i class="fas fa-arrow-down"></i> -1.2% este mes
-                        </div>
-                    </div>
-                    <!-- KPI 3 -->
-                    <div class="kpi-card">
-                        <span class="kpi-label">Desviación de Mermas</span>
-                        <div class="kpi-value">5%</div>
-                        <div class="kpi-trend up">
-                            <i class="fas fa-check-circle"></i> Dentro del rango
-                        </div>
-                    </div>
+        <!-- Dashboard View (Tablero) -->
+        <section id="view-dashboard" class="content-view active">
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <span class="kpi-label">Margen de Contribución</span>
+                    <div class="kpi-value">32%</div>
+                    <div class="kpi-trend up"><i class="fas fa-arrow-up"></i> +2.5%</div>
                 </div>
-
-                <!-- Central Console -->
-                <div class="console-container">
-                    <div class="chat-box" id="chat-output">
-                        <div class="chat-welcome">
-                            <i class="fas fa-brain"></i>
-                            <p>Consulta al Cerebro <strong>COCINA&CIA</strong></p>
-                            <span style="font-size: 13px; color: var(--text-dim)">Analiza tus 4 archivos maestros en
-                                tiempo real</span>
-                        </div>
-                    </div>
-                    <form class="input-area" id="console-form">
-                        <input type="text" class="console-input" id="user-input"
-                            placeholder="Pregunta a la IA o busca operaciones...">
-                        <button type="submit" class="send-btn">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
+                <div class="kpi-card">
+                    <span class="kpi-label">Costo de Alimento</span>
+                    <div class="kpi-value">18%</div>
+                    <div class="kpi-trend down"><i class="fas fa-arrow-down"></i> -1.2%</div>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Desviación de Mermas</span>
+                    <div class="kpi-value">5%</div>
+                    <div class="kpi-trend up"><i class="fas fa-check-circle"></i> OK</div>
                 </div>
             </div>
 
-            <!-- Right Column: Shortcuts and Links -->
-            <aside class="right-panel">
-                <!-- Google Drive Repositories -->
-                <div class="panel-section">
-                    <h3>Archivos Maestros</h3>
-                    <ul class="file-list">
-                        <li>
-                            <a href="#" class="file-item">
-                                <div class="file-icon"><i class="fas fa-database"></i></div>
-                                <div>00_Core_Logic</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="file-item">
-                                <div class="file-icon" style="color: #FBBC05; background: rgba(251,188,5,0.1)"><i
-                                        class="fas fa-search-dollar"></i></div>
-                                <div>01_Market_Intelligence</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="file-item">
-                                <div class="file-icon" style="color: #34A853; background: rgba(52,168,83,0.1)"><i
-                                        class="fas fa-book-open"></i></div>
-                                <div>02_Production_Playbook</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="file-item">
-                                <div class="file-icon" style="color: #EA4335; background: rgba(234,67,53,0.1)"><i
-                                        class="fas fa-history"></i></div>
-                                <div>03_Operational_Log</div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="dashboard-grid">
+                <!-- Left: Console & Actions -->
+                <div class="left-panel">
+                    <div class="console-container">
+                        <div class="chat-box" id="chat-output">
+                            <div class="chat-welcome">
+                                <i class="fas fa-brain"></i>
+                                <p>Cerebro <strong>COCINA&CIA</strong></p>
+                            </div>
+                        </div>
+                        <form class="input-area" id="console-form">
+                            <input type="text" class="console-input" id="user-input" placeholder="Pregunta a la IA...">
+                            <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
 
-                <!-- Action Buttons -->
-                <div class="panel-section">
-                    <h3>Acciones Rápidas</h3>
-                    <div class="smart-btns">
-                        <div class="smart-btn" onclick="triggerAction('Producción')">Generar Plan de Producción</div>
-                        <div class="smart-btn" onclick="triggerAction('Auditoría')">Auditoría de Costos</div>
-                        <div class="smart-btn" onclick="triggerAction('Cierre')">Cierre de Turno</div>
+                    <!-- Fast Actions below Chat -->
+                    <div class="actions-row">
+                        <div class="smart-btn" onclick="triggerAction('Producción')">Plan Producción</div>
+                        <div class="smart-btn" onclick="triggerAction('Auditoría')">Auditoría Costos</div>
+                        <div class="smart-btn" onclick="triggerAction('Cierre')">Cierre Turno</div>
+                    </div>
+
+                    <!-- Action History -->
+                    <div class="history-panel">
+                        <h4><i class="fas fa-history"></i> Historial de Acciones</h4>
+                        <ul class="history-list" id="action-history">
+                            <li class="history-item">
+                                <span>Sistema iniciado correctamente</span>
+                                <span class="history-time">Hace 5m</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </aside>
+
+                <!-- Right: Master Files -->
+                <aside class="right-panel">
+                    <div class="panel-section">
+                        <h3>Archivos Maestros</h3>
+                        <ul class="file-list">
+                            <li><a href="https://notebooklm.google.com/notebook/1a75eed6-32cb-419d-843b-03ec15406158"
+                                    target="_blank" class="file-item">
+                                    <div class="file-icon"><i class="fas fa-database"></i></div>00_Core_Logic
+                                </a></li>
+                            <li><a href="https://notebooklm.google.com/notebook/1a75eed6-32cb-419d-843b-03ec15406158"
+                                    target="_blank" class="file-item">
+                                    <div class="file-icon" style="color:#FBBC05"><i class="fas fa-search-dollar"></i>
+                                    </div>01_Market_Intelligence
+                                </a></li>
+                            <li><a href="https://notebooklm.google.com/notebook/1a75eed6-32cb-419d-843b-03ec15406158"
+                                    target="_blank" class="file-item">
+                                    <div class="file-icon" style="color:#34A853"><i class="fas fa-book-open"></i></div>
+                                    02_Production_Playbook
+                                </a></li>
+                            <li><a href="https://notebooklm.google.com/notebook/1a75eed6-32cb-419d-843b-03ec15406158"
+                                    target="_blank" class="file-item">
+                                    <div class="file-icon" style="color:#EA4335"><i class="fas fa-history"></i></div>
+                                    03_Operational_Log
+                                </a></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Sales View -->
+        <section id="view-sales" class="sales-section">
+            <h2 style="font-family: var(--font-head); margin-bottom: 20px;">Evolución de Ventas</h2>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
         </section>
     </main>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="scripts.js"></script>
 </body>
 
