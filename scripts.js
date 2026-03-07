@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
     const views = {
         'Tablero': document.getElementById('view-dashboard'),
-        'Ventas': document.getElementById('view-sales')
+        'Ventas': document.getElementById('view-sales'),
+        'Clientes': document.getElementById('view-clientes')
     };
 
     navLinks.forEach(link => {
@@ -21,11 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 link.classList.add('active');
 
                 // Switch views
-                Object.values(views).forEach(v => v.classList.remove('active'));
-                views[viewName].classList.add('active');
+                Object.values(views).forEach(v => {
+                    if (v) v.classList.remove('active');
+                });
+                if (views[viewName]) views[viewName].classList.add('active');
 
                 if (viewName === 'Ventas') {
                     initSalesChart();
+                } else if (viewName === 'Clientes') {
+                    initClientsChart();
                 }
             }
         });
@@ -125,6 +130,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#999' } },
                     x: { grid: { display: false }, ticks: { color: '#999' } }
+                }
+            }
+        });
+    }
+
+    let clientsChartInstance = null;
+    function initClientsChart() {
+        if (clientsChartInstance) return;
+        const ctx = document.getElementById('clientsChart').getContext('2d');
+        clientsChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Directo', 'Social', 'Referidos', 'Email'],
+                datasets: [{
+                    data: [40, 30, 20, 10],
+                    backgroundColor: ['#BFFF00', 'rgba(191, 255, 0, 0.6)', 'rgba(191, 255, 0, 0.3)', 'rgba(191, 255, 0, 0.1)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#999' } }
                 }
             }
         });

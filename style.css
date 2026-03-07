@@ -312,14 +312,13 @@ body {
     font-size: 10px;
 }
 
-/* Sales Chart Section */
-.sales-section {
+/* View Management */
+.content-view {
     display: none;
-    /* Hidden by default, toggled via JS */
     animation: fadeIn 0.4s ease;
 }
 
-.sales-section.active {
+.content-view.active {
     display: block;
 }
 
