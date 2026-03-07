@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COCINA&CIA | SO Gastronómico</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Lateral Navigation -->
+    <aside class="sidebar">
+        <div class="brand">
+            COCINA<span>&CIA</span>
+        </div>
+
+        <nav class="nav-links">
+            <div class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-th-large"></i> Tablero
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Ventas
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-box"></i> Inventario
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-dollar-sign"></i> Costos
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-alt"></i> Informes
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i> Personal
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-link">
+                <i class="fas fa-cog"></i> Ajustes
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-layout">
+        <!-- Top Bar with Alert -->
+        <header class="top-bar">
+            <div class="ia-notif" id="ia-alert">
+                <i class="fas fa-robot"></i>
+                <span>Alerta IA: El margen del Pollo al Curry bajó al 26%.</span>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar">M</div>
+                <span>Usuario Antigravity</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </header>
+
+        <!-- Dynamic Grid -->
+        <section class="dashboard-grid">
+            <!-- Left Column: KPIs and Console -->
+            <div class="left-panel">
+                <div class="kpi-row">
+                    <!-- KPI 1 -->
+                    <div class="kpi-card">
+                        <span class="kpi-label">Margen de Contribución</span>
+                        <div class="kpi-value">32%</div>
+                        <div class="kpi-trend up">
+                            <i class="fas fa-arrow-up"></i> +2.5% vs semana pasada
+                        </div>
+                    </div>
+                    <!-- KPI 2 -->
+                    <div class="kpi-card">
+                        <span class="kpi-label">Costo de Alimento</span>
+                        <div class="kpi-value">18%</div>
+                        <div class="kpi-trend down">
+                            <i class="fas fa-arrow-down"></i> -1.2% este mes
+                        </div>
+                    </div>
+                    <!-- KPI 3 -->
+                    <div class="kpi-card">
+                        <span class="kpi-label">Desviación de Mermas</span>
+                        <div class="kpi-value">5%</div>
+                        <div class="kpi-trend up">
+                            <i class="fas fa-check-circle"></i> Dentro del rango
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Central Console -->
+                <div class="console-container">
+                    <div class="chat-box" id="chat-output">
+                        <div class="chat-welcome">
+                            <i class="fas fa-brain"></i>
+                            <p>Consulta al Cerebro <strong>COCINA&CIA</strong></p>
+                            <span style="font-size: 13px; color: var(--text-dim)">Analiza tus 4 archivos maestros en
+                                tiempo real</span>
+                        </div>
+                    </div>
+                    <form class="input-area" id="console-form">
+                        <input type="text" class="console-input" id="user-input"
+                            placeholder="Pregunta a la IA o busca operaciones...">
+                        <button type="submit" class="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column: Shortcuts and Links -->
+            <aside class="right-panel">
+                <!-- Google Drive Repositories -->
+                <div class="panel-section">
+                    <h3>Archivos Maestros</h3>
+                    <ul class="file-list">
+                        <li>
+                            <a href="#" class="file-item">
+                                <div class="file-icon"><i class="fas fa-database"></i></div>
+                                <div>00_Core_Logic</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="file-item">
+                                <div class="file-icon" style="color: #FBBC05; background: rgba(251,188,5,0.1)"><i
+                                        class="fas fa-search-dollar"></i></div>
+                                <div>01_Market_Intelligence</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="file-item">
+                                <div class="file-icon" style="color: #34A853; background: rgba(52,168,83,0.1)"><i
+                                        class="fas fa-book-open"></i></div>
+                                <div>02_Production_Playbook</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="file-item">
+                                <div class="file-icon" style="color: #EA4335; background: rgba(234,67,53,0.1)"><i
+                                        class="fas fa-history"></i></div>
+                                <div>03_Operational_Log</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="panel-section">
+                    <h3>Acciones Rápidas</h3>
+                    <div class="smart-btns">
+                        <div class="smart-btn" onclick="triggerAction('Producción')">Generar Plan de Producción</div>
+                        <div class="smart-btn" onclick="triggerAction('Auditoría')">Auditoría de Costos</div>
+                        <div class="smart-btn" onclick="triggerAction('Cierre')">Cierre de Turno</div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
