@@ -178,15 +178,16 @@ body {
 /* Dashboard Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2.5fr 1fr;
-    gap: 30px;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    height: calc(100vh - 120px);
 }
 
 .kpi-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .kpi-card {

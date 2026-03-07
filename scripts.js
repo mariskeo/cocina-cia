@@ -47,48 +47,63 @@ document.addEventListener('DOMContentLoaded', () => {
         if (actionHistory.children.length > 5) actionHistory.lastChild.remove();
     }
 
-    // AI Chat Logic
-    consoleForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const query = userInput.value.trim();
-        if (!query) return;
+    // AI Chat Logic (Generic)
+    function setupChat(formId, inputId, outputId, context) {
+        const form = document.getElementById(formId);
+        const input = document.getElementById(inputId);
+        const output = document.getElementById(outputId);
+        if (!form || !input || !output) return;
 
-        if (chatOutput.querySelector('.chat-welcome')) chatOutput.innerHTML = '';
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = input.value.trim();
+            if (!query) return;
 
-        addMessage('user', query);
-        logToHistory(`Consulta IA: "${query.substring(0, 20)}..."`);
-        userInput.value = '';
+            if (output.querySelector('.chat-welcome')) output.innerHTML = '';
 
-        setTimeout(() => {
-            const response = generateAIResponse(query);
-            addMessage('ai', response);
-        }, 800);
-    });
+            addMessage(output, 'user', query);
+            logToHistory(`Consulta ${context}: "${query.substring(0, 20)}..."`);
+            input.value = '';
 
-    function addMessage(sender, text) {
+            setTimeout(() => {
+                const response = generateAIResponse(query, context);
+                addMessage(output, 'ai', response);
+            }, 800);
+        });
+    }
+
+    setupChat('console-form', 'user-input', 'chat-output', 'Gral');
+    setupChat('console-form-sales', 'user-input-sales', 'chat-output-sales', 'Ventas');
+
+    function addMessage(target, sender, text) {
         const msgDiv = document.createElement('div');
         msgDiv.style.marginBottom = '12px';
         msgDiv.style.padding = '10px 15px';
         msgDiv.style.borderRadius = '10px';
-        msgDiv.style.fontSize = '13px';
+        msgDiv.style.fontSize = '12px';
         msgDiv.className = sender === 'user' ? 'message-user' : 'message-ai';
 
         if (sender === 'user') {
             msgDiv.style.background = 'rgba(255,255,255,0.05)';
             msgDiv.style.marginLeft = 'auto';
-            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block;">MARISKE</span>${text}`;
+            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block; font-size:10px;">MARISKE</span>${text}`;
         } else {
             msgDiv.style.background = 'rgba(191,255,0,0.05)';
-            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block;">CEREBRO COCINA&CIA</span>${text}`;
+            msgDiv.innerHTML = `<span style="color:var(--primary); font-weight:700; display:block; font-size:10px;">CEREBRO COCINA&CIA</span>${text}`;
         }
-        chatOutput.appendChild(msgDiv);
-        chatOutput.scrollTop = chatOutput.scrollHeight;
+        target.appendChild(msgDiv);
+        target.scrollTop = target.scrollHeight;
     }
 
-    function generateAIResponse(query) {
+    function generateAIResponse(query, context) {
         const q = query.toLowerCase();
+        if (context === 'Ventas') {
+            if (q.includes('peor') || q.includes('lentejas')) return "Según 04_Market_Intelligence, las lentejas tienen baja rotación los fines de semana. Sugiero combo con bebida artesanal.";
+            if (q.includes('mejor') || q.includes('curry')) return "El Pollo al Curry tiene un margen del 38%. Es tu caballo de batalla.";
+            return "Analizando tendencias de mercado (04) para optimizar tus ventas...";
+        }
         if (q.includes('margen')) return "Analizando 01_Market_Intelligence... Riesgo detectado en Pollo al Curry (Margen: 26%).";
-        if (q.includes('ventas')) return "Ventas subieron un 12% este mes. Estos datos provienen de 04_Market_Intelligence. He actualizado el gráfico en la sección 'Ventas'.";
+        if (q.includes('ventas')) return "Ventas subieron un 12% este mes. Estos datos provienen de 04_Market_Intelligence.";
         if (q.includes('cliente') || q.includes('base')) return "Consultando 05_Client_Base... Tienes 150 clientes activos con una recurrencia del 22%.";
         return "Procesando datos maestros (00-05) para responder a: " + query;
     }
