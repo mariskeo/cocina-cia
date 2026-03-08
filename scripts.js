@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'Ventas': document.getElementById('view-sales'),
         'Clientes': document.getElementById('view-clientes'),
         'Inventario': document.getElementById('view-inventario'),
-        'Informes': document.getElementById('view-informes')
+        'Informes': document.getElementById('view-informes'),
+        'Costos': document.getElementById('view-costos')
     };
 
     navLinks.forEach(link => {
@@ -35,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     initClientsChart();
                 } else if (viewName === 'Inventario') {
                     renderInventory();
+                } else if (viewName === 'Costos') {
+                    renderCostMonitor();
                 }
             }
         });
@@ -322,6 +325,103 @@ document.addEventListener('DOMContentLoaded', () => {
             reportHistoryContainer.appendChild(item);
         });
     }
+
+    // --- Costs Logic ---
+    const plateCostsData = [
+        { id: 'ALM-01', name: 'Pollo al Curry', theory: 5200, real: 5850, alert: true, suggestion: 'Revisar porcionamiento de proteína' },
+        { id: 'ALM-02', name: 'Bowl Vegano', theory: 3100, real: 3200, alert: false, suggestion: 'Costo bajo control' },
+        { id: 'ALM-03', name: 'Lentejas Tradicionales', theory: 2800, real: 3450, alert: true, suggestion: 'Mermas altas en sofrito' },
+        { id: 'ALM-04', name: 'Pasta Pesto', theory: 4500, real: 4650, alert: false, suggestion: 'Optimizar empaque' }
+    ];
+
+    const costMonitorBody = document.getElementById('cost-monitor-body');
+    const simulationForm = document.getElementById('simulation-form');
+    const simModal = document.getElementById('sim-modal');
+    const simResultsContent = document.getElementById('sim-results-content');
+
+    window.renderCostMonitor = () => {
+        if (!costMonitorBody) return;
+        costMonitorBody.innerHTML = '';
+        plateCostsData.forEach(plate => {
+            const dev = ((plate.real - plate.theory) / plate.theory) * 100;
+            const tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid var(--card-border)';
+            tr.innerHTML = `
+                <td style="padding: 15px 10px;">
+                    <span style="font-weight: 700;">${plate.id}</span><br>
+                    <span style="font-size: 11px; color: var(--text-dim);">${plate.name}</span>
+                </td>
+                <td style="padding: 15px 10px; font-family: 'JetBrains Mono', monospace;">$${plate.theory.toLocaleString()}</td>
+                <td style="padding: 15px 10px; font-family: 'JetBrains Mono', monospace;">$${plate.real.toLocaleString()}</td>
+                <td style="padding: 15px 10px; font-family: 'JetBrains Mono', monospace; color: ${dev > 5 ? 'var(--danger)' : 'var(--success)'}">
+                    ${dev > 0 ? '+' : ''}${dev.toFixed(1)}% ${dev > 5 ? '<i class="fas fa-exclamation-triangle"></i>' : ''}
+                </td>
+                <td style="padding: 15px 10px; color: var(--primary); font-style: italic;">"${plate.suggestion}"</td>
+            `;
+            costMonitorBody.appendChild(tr);
+        });
+    }
+
+    if (simulationForm) {
+        simulationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const queryInput = document.getElementById('simulation-input');
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            // Simple Logic for simulation based on keywords
+            let resultHtml = '';
+            if (query.toLowerCase().includes('gas') || query.toLowerCase().includes('servicios')) {
+                resultHtml = `
+                    <p style="margin-bottom: 20px;">Simulando incremento del 10% en servicios públicos (Gas/Energía):</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Punto de Equilibrio Actual:</span>
+                            <span style="font-weight: 700;">850 unidades</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; color: var(--warning);">
+                            <span>Nuevo Punto de Equilibrio:</span>
+                            <span style="font-weight: 700;">912 unidades</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-dim); font-style: italic;">
+                            "Recomendación: Incrementar el precio de los platos de alta rotación en un 3% para compensar el costo operativo."
+                        </p>
+                    </div>
+                `;
+            } else if (query.toLowerCase().includes('arriendo') || query.toLowerCase().includes('renta')) {
+                resultHtml = `
+                    <p style="margin-bottom: 20px;">Simulando ajuste de Canon de Arrendamiento:</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>MBO Global Proyectado:</span>
+                            <span style="color: var(--danger);">28.5% (⬇️ 4%)</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-dim); font-style: italic;">
+                            "Impacto significativo en gastos fijos. Se sugiere optimizar la nómina operativa en horas valle."
+                        </p>
+                    </div>
+                `;
+            } else {
+                resultHtml = `
+                    <p style="margin-bottom: 20px;">Analizando impacto para: "${query}"</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center;">
+                        <i class="fas fa-spinner fa-spin" style="margin-bottom: 10px; font-size: 24px;"></i>
+                        <p>Simulando variables financieras de los archivos 01, 02 y 06...</p>
+                        <p style="color: var(--primary); margin-top: 10px;">Proyección: Escenario Neutro (+0.5% en costos fijos).</p>
+                    </div>
+                `;
+            }
+
+            simResultsContent.innerHTML = resultHtml;
+            simModal.style.display = 'flex';
+            logToHistory(`Simulación ejecutada: ${query.substring(0, 15)}...`);
+            queryInput.value = '';
+        });
+    }
+
+    window.closeSimModal = () => {
+        if (simModal) simModal.style.display = 'none';
+    };
 
     function addMessage(target, sender, text) {
         const msgDiv = document.createElement('div');
