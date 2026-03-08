@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'Clientes': document.getElementById('view-clientes'),
         'Inventario': document.getElementById('view-inventario'),
         'Informes': document.getElementById('view-informes'),
-        'Costos': document.getElementById('view-costos')
+        'Costos': document.getElementById('view-costos'),
+        'Configuración': document.getElementById('view-settings')
     };
 
     navLinks.forEach(link => {
@@ -421,6 +422,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.closeSimModal = () => {
         if (simModal) simModal.style.display = 'none';
+    };
+
+    // --- Settings Tab Logic ---
+    window.switchSettingsTab = (tabName) => {
+        const contents = document.querySelectorAll('.settings-tab-content');
+        const buttons = document.querySelectorAll('.tab-btn');
+
+        contents.forEach(content => content.style.display = 'none');
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.color = 'var(--text-dim)';
+            btn.style.borderBottom = 'none';
+        });
+
+        const activeContent = document.getElementById(`tab-${tabName}`);
+        if (activeContent) {
+            activeContent.style.display = tabName === 'docs' ? 'grid' : 'block';
+        }
+
+        const activeBtn = Array.from(buttons).find(btn => btn.innerText.toLowerCase().includes(tabName === 'user' ? 'usuario' : tabName === 'system' ? 'sistema' : 'documentación'));
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.style.color = '#fff';
+            activeBtn.style.borderBottom = '2px solid var(--primary)';
+        }
     };
 
     function addMessage(target, sender, text) {

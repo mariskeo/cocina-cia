@@ -508,6 +508,145 @@
                     Cerrar</button>
             </div>
         </div>
+        <!-- Settings View -->
+        <section id="view-settings" class="view-section">
+            <header class="view-header" style="margin-bottom: 30px;">
+                <h2 style="font-family: var(--font-head); font-size: 28px;">Configuración del Sistema</h2>
+                <p style="color: var(--text-dim);">Gestione su perfil, preferencias de UI y consulte la documentación
+                    oficial.</p>
+            </header>
+
+            <!-- Settings Tabs Navigation -->
+            <div
+                style="display: flex; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px;">
+                <button class="tab-btn active" onclick="switchSettingsTab('user')"
+                    style="background: none; border: none; color: #fff; padding: 10px 20px; font-family: 'JetBrains Mono', monospace; cursor: pointer; border-bottom: 2px solid var(--primary);">01.
+                    USUARIO</button>
+                <button class="tab-btn" onclick="switchSettingsTab('system')"
+                    style="background: none; border: none; color: var(--text-dim); padding: 10px 20px; font-family: 'JetBrains Mono', monospace; cursor: pointer;">02.
+                    SISTEMA / UI</button>
+                <button class="tab-btn" onclick="switchSettingsTab('docs')"
+                    style="background: none; border: none; color: var(--text-dim); padding: 10px 20px; font-family: 'JetBrains Mono', monospace; cursor: pointer;">03.
+                    DOCUMENTACIÓN</button>
+            </div>
+
+            <!-- Tab Content: User -->
+            <div id="tab-user" class="settings-tab-content active">
+                <div class="kpi-card" style="max-width: 600px; padding: 30px;">
+                    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+                        <div
+                            style="width: 80px; height: 80px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #000; font-size: 32px; font-weight: 800;">
+                            MV</div>
+                        <div>
+                            <h3 style="font-size: 20px; margin-bottom: 5px;">Marcos Vallejo</h3>
+                            <p style="color: var(--text-dim); font-size: 14px;">Administrador de Restaurante (Owner)</p>
+                        </div>
+                    </div>
+                    <form style="display: grid; gap: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <label
+                                    style="display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 8px;">NOMBRE
+                                    COMPLETO</label>
+                                <input type="text" value="Marcos Vallejo" class="console-input"
+                                    style="width: 100%; padding: 12px;">
+                            </div>
+                            <div>
+                                <label
+                                    style="display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 8px;">EMAIL</label>
+                                <input type="email" value="m.vallejo@cocinacia.com" class="console-input"
+                                    style="width: 100%; padding: 12px;">
+                            </div>
+                        </div>
+                        <button class="smart-btn" style="width: fit-content; margin-top: 10px;">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tab Content: System -->
+            <div id="tab-system" class="settings-tab-content" style="display: none;">
+                <div class="kpi-card" style="max-width: 600px; padding: 30px;">
+                    <h3 style="font-size: 18px; margin-bottom: 25px;">Preferencias de Interfaz</h3>
+                    <div style="display: grid; gap: 25px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p style="font-size: 15px;">Densidad Visual</p>
+                                <p style="font-size: 12px; color: var(--text-dim);">Reducir espacio entre elementos para
+                                    pantallas pequeñas.</p>
+                            </div>
+                            <input type="checkbox" id="ui-density"
+                                style="accent-color: var(--primary); width: 20px; height: 20px;">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p style="font-size: 15px;">Animaciones Tech</p>
+                                <p style="font-size: 12px; color: var(--text-dim);">Activar efectos de glitch y
+                                    transiciones de datos.</p>
+                            </div>
+                            <input type="checkbox" checked
+                                style="accent-color: var(--primary); width: 20px; height: 20px;">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p style="font-size: 15px;">Color de Acento</p>
+                                <p style="font-size: 12px; color: var(--text-dim);">Personalizar el tono principal (Lime
+                                    Green por defecto).</p>
+                            </div>
+                            <input type="color" value="#BFFF00"
+                                style="background: none; border: none; width: 40px; height: 40px; cursor: pointer;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Documentation -->
+            <div id="tab-docs" class="settings-tab-content" style="display: none;">
+                <div style="display: grid; grid-template-columns: 250px 1fr; gap: 30px;">
+                    <aside
+                        style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); height: fit-content;">
+                        <ul style="list-style: none; display: grid; gap: 15px;">
+                            <li><a href="#doc-intro"
+                                    style="color: var(--primary); text-decoration: none; font-size: 13px;">Introducción
+                                    al Tablero</a></li>
+                            <li><a href="#doc-logic"
+                                    style="color: var(--text-dim); text-decoration: none; font-size: 13px;">Lógica de
+                                    Datos (Kernel)</a></li>
+                            <li><a href="#doc-ai"
+                                    style="color: var(--text-dim); text-decoration: none; font-size: 13px;">Uso de
+                                    Cerebro IA</a></li>
+                            <li><a href="#doc-costos"
+                                    style="color: var(--text-dim); text-decoration: none; font-size: 13px;">Manual de
+                                    Costos</a></li>
+                        </ul>
+                    </aside>
+                    <article
+                        style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 40px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div id="doc-intro">
+                            <h3 style="font-family: var(--font-head); font-size: 24px; margin-bottom: 20px;">Manual de
+                                Uso: COCINA&CIA v2.0</h3>
+                            <p style="line-height: 1.6; margin-bottom: 20px;">Bienvenido al centro de mando inteligente.
+                                Este tablero está diseñado para automatizar la toma de decisiones basada en datos reales
+                                del negocio.</p>
+
+                            <h4 style="color: var(--primary); margin: 25px 0 15px;">Estructura de Navegación</h4>
+                            <ul style="display: grid; gap: 10px; padding-left: 20px;">
+                                <li><strong>Tablero:</strong> Vista holística y KPIs de salud general.</li>
+                                <li><strong>Ventas:</strong> Análisis de rentabilidad por canal y producto.</li>
+                                <li><strong>Costos:</strong> Monitor técnico de mermas y simulador financiero.</li>
+                                <li><strong>Informes:</strong> Generador de PDFs y trazabilidad histórica.</li>
+                            </ul>
+
+                            <h4 style="color: var(--primary); margin: 25px 0 15px;">El Cerebro (Antigravity Console)
+                            </h4>
+                            <p style="line-height: 1.6;">La consola lateral es su asistente proactivo. Puede pedirle
+                                resúmenes ("Dime qué pasó hoy"), análisis ("¿Por qué bajó el margen?") o acciones
+                                directas ("Generar orden de compra").</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Scripts -->
