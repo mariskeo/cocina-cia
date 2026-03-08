@@ -40,7 +40,7 @@
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" id="nav-reports">
                     <i class="fas fa-file-alt"></i> Informes
                 </a>
             </div>
@@ -304,6 +304,113 @@
                 <h3 style="font-size: 14px; margin-bottom: 15px; color: var(--text-dim); text-align: center;">Top
                     Canales de Adquisición</h3>
                 <canvas id="clientsChart"></canvas>
+            </div>
+        </section>
+        <!-- Reports View -->
+        <section id="view-informes" class="content-view">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div>
+                    <h2 style="font-family: var(--font-head); margin-bottom: 5px;">Centro de Informes</h2>
+                    <p style="color: var(--text-dim); font-size: 13px;">Generación de reportes operativos y estratégicos
+                    </p>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="text-align: right;">
+                        <p style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">FECHA CORTE</p>
+                        <input type="date" id="report-date" class="console-input"
+                            style="padding: 8px 15px; background: rgba(255,255,255,0.05);">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.8fr 1.1fr; gap: 20px; align-items: stretch;">
+                <!-- Left: Report Selection -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <!-- Report 1 -->
+                        <div class="kpi-card" style="padding: 25px; transition: var(--transition); cursor: pointer;"
+                            onclick="generateReport('Ventas')">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <i class="fas fa-chart-bar" style="font-size: 24px; color: var(--primary);"></i>
+                                <span class="status-badge status-ok" style="font-size: 9px;">MENSUAL</span>
+                            </div>
+                            <h4 style="font-family: var(--font-head); margin-bottom: 10px;">Rendimiento de Ventas</h4>
+                            <p style="font-size: 11px; color: var(--text-dim); margin-bottom: 20px;">Análisis detallado
+                                de ingresos por categoría y zona.</p>
+                            <button class="smart-btn" style="width: 100%; padding: 10px;">Generar Reporte</button>
+                        </div>
+                        <!-- Report 2 -->
+                        <div class="kpi-card" style="padding: 25px; transition: var(--transition); cursor: pointer;"
+                            onclick="generateReport('Inventario')">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <i class="fas fa-boxes" style="font-size: 24px; color: var(--warning);"></i>
+                                <span class="status-badge status-warning" style="font-size: 9px;">CRÍTICO</span>
+                            </div>
+                            <h4 style="font-family: var(--font-head); margin-bottom: 10px;">Stock e Insumos</h4>
+                            <p style="font-size: 11px; color: var(--text-dim); margin-bottom: 20px;">Estado de rotación
+                                y alertas de reabastecimiento urgente.</p>
+                            <button class="smart-btn" style="width: 100%; padding: 10px;">Generar Reporte</button>
+                        </div>
+                        <!-- Report 3 -->
+                        <div class="kpi-card" style="padding: 25px; transition: var(--transition); cursor: pointer;"
+                            onclick="generateReport('Rentabilidad')">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <i class="fas fa-dollar-sign" style="font-size: 24px; color: var(--primary);"></i>
+                                <span class="status-badge status-ok" style="font-size: 9px;">FINANCIERO</span>
+                            </div>
+                            <h4 style="font-family: var(--font-head); margin-bottom: 10px;">Costeo y Rentabilidad</h4>
+                            <p style="font-size: 11px; color: var(--text-dim); margin-bottom: 20px;">Margen de
+                                contribución por plato y análisis de costos.</p>
+                            <button class="smart-btn" style="width: 100%; padding: 10px;">Generar Reporte</button>
+                        </div>
+                        <!-- Report 4 -->
+                        <div class="kpi-card" style="padding: 25px; transition: var(--transition); cursor: pointer;"
+                            onclick="generateReport('Clientes')">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <i class="fas fa-heart" style="font-size: 24px; color: #FF4444;"></i>
+                                <span class="status-badge status-ok" style="font-size: 9px;">CLIENTES</span>
+                            </div>
+                            <h4 style="font-family: var(--font-head); margin-bottom: 10px;">Fidelización y Canales</h4>
+                            <p style="font-size: 11px; color: var(--text-dim); margin-bottom: 20px;">Comportamiento de
+                                recompra y efectividad de canales.</p>
+                            <button class="smart-btn" style="width: 100%; padding: 10px;">Generar Reporte</button>
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <div class="chart-container" style="margin-top: 0; flex: 1; padding: 30px;">
+                        <h3 style="font-family: var(--font-head); font-size: 16px; margin-bottom: 20px;">Historial de
+                            Reportes</h3>
+                        <div id="report-history" style="max-height: 200px; overflow-y: auto;">
+                            <!-- History items injected here -->
+                            <div style="text-align: center; color: var(--text-dim); padding: 20px;">No hay reportes
+                                generados recientemente.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Brain Console -->
+                <div class="console-container"
+                    style="display: flex; flex-direction: column; padding: 30px; height: auto;">
+                    <div class="chat-box" id="chat-output-reports"
+                        style="flex: 1; height: 400px; margin-bottom: 15px; background: rgba(0,0,0,0.2);">
+                        <div class="chat-welcome" style="margin-top: 50px;">
+                            <i class="fas fa-brain" style="font-size: 32px;"></i>
+                            <p style="font-size: 13px;">Asistente de Informes | <strong>IA Central</strong></p>
+                        </div>
+                    </div>
+                    <form class="input-area" id="console-form-reports">
+                        <input type="text" class="console-input" id="user-input-reports"
+                            placeholder="Consulta sobre reportes..."
+                            style="padding: 12px 50px 12px 20px; font-size: 14px;">
+                        <button type="submit" class="send-btn" style="width: 36px; height: 36px;"><i
+                                class="fas fa-paper-plane" style="font-size: 14px;"></i></button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>

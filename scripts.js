@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'Tablero': document.getElementById('view-dashboard'),
         'Ventas': document.getElementById('view-sales'),
         'Clientes': document.getElementById('view-clientes'),
-        'Inventario': document.getElementById('view-inventario')
+        'Inventario': document.getElementById('view-inventario'),
+        'Informes': document.getElementById('view-informes')
     };
 
     navLinks.forEach(link => {
@@ -263,6 +264,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupChat('console-form', 'user-input', 'chat-output', 'Gral');
     setupChat('console-form-sales', 'user-input-sales', 'chat-output-sales', 'Ventas');
+    setupChat('console-form-reports', 'user-input-reports', 'chat-output-reports', 'Informes');
+
+    // --- Reports Logic ---
+    const reportHistoryList = [];
+    const reportDateInput = document.getElementById('report-date');
+    const reportHistoryContainer = document.getElementById('report-history');
+
+    if (reportDateInput) {
+        reportDateInput.valueAsDate = new Date();
+    }
+
+    window.generateReport = (type) => {
+        const date = reportDateInput.value || new Date().toLocaleDateString();
+        logToHistory(`Generando informe: ${type}`);
+
+        // Add to history
+        reportHistoryList.unshift({
+            type: type,
+            date: date,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            id: 'REP-' + Math.floor(Math.random() * 10000)
+        });
+
+        renderReportHistory();
+
+        // Visual feedback
+        const output = document.getElementById('chat-output-reports');
+        if (output.querySelector('.chat-welcome')) output.innerHTML = '';
+        addMessage(output, 'ai', `📊 Informe de **${type}** generado correctamente con fecha de corte **${date}**. Puedes descargarlo o verlo en el historial.`);
+    };
+
+    function renderReportHistory() {
+        if (!reportHistoryContainer) return;
+
+        if (reportHistoryList.length === 0) {
+            reportHistoryContainer.innerHTML = '<div style="text-align: center; color: var(--text-dim); padding: 20px;">No hay reportes generados recientemente.</div>';
+            return;
+        }
+
+        reportHistoryContainer.innerHTML = '';
+        reportHistoryList.forEach(report => {
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.style.padding = '12px 0';
+            item.innerHTML = `
+                <div style="flex: 1;">
+                    <p style="font-weight: 700; font-size: 13px;">${report.type}</p>
+                    <p style="font-size: 11px; color: var(--text-dim);">ID: ${report.id} | Corte: ${report.date}</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 10px; color: var(--text-dim);">${report.timestamp}</span>
+                    <button class="smart-btn" style="padding: 5px 10px; font-size: 10px;"><i class="fas fa-download"></i></button>
+                    <button class="smart-btn" style="padding: 5px 10px; font-size: 10px;"><i class="fas fa-eye"></i></button>
+                </div>
+            `;
+            reportHistoryContainer.appendChild(item);
+        });
+    }
 
     function addMessage(target, sender, text) {
         const msgDiv = document.createElement('div');
