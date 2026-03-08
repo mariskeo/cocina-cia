@@ -55,8 +55,8 @@
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-users"></i> Personal
+                <a href="#" class="nav-link" id="nav-inventory">
+                    <i class="fas fa-boxes"></i> Inventario
                 </a>
             </div>
         </nav>
@@ -235,7 +235,54 @@
 
         </section>
 
-        <!-- Clients View -->
+        <!-- Inventory View -->
+        <section id="view-inventario" class="content-view">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div>
+                    <h2 style="font-family: var(--font-head); margin-bottom: 5px;">Gestión de Inventario</h2>
+                    <p style="color: var(--text-dim); font-size: 13px;">
+                        <i class="fas fa-link"></i> Fuente: <strong>01_Market_Intelligence (stock_inventario)</strong>
+                    </p>
+                </div>
+                <button class="smart-btn" id="btn-generate-order" style="width: auto; padding: 12px 25px;">
+                    <i class="fas fa-shopping-cart"></i> Generar Pedido (<span id="order-count">0</span>)
+                </button>
+            </div>
+
+            <div class="inventory-controls" style="margin-bottom: 30px; display: flex; gap: 15px;">
+                <input type="text" id="inventory-search" class="console-input" placeholder="Buscar insumo..."
+                    style="max-width: 400px; padding: 12px 20px;">
+                <select id="inventory-sort" class="console-input" style="max-width: 200px; padding: 0 15px;">
+                    <option value="urgencia">Ordenar por Urgencia</option>
+                    <option value="nombre">Ordenar por Nombre</option>
+                    <option value="stock">Ordenar por Stock</option>
+                </select>
+            </div>
+
+            <div id="inventory-grid" class="inventory-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                <!-- Cards will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- Order Modal/Sidebar (Hidden by default) -->
+        <div id="order-panel" class="order-panel"
+            style="display: none; position: fixed; right: 0; top: 0; width: 400px; height: 100%; background: var(--bg-dark); border-left: 1px solid var(--card-border); z-index: 1000; padding: 40px; box-shadow: -20px 0 50px rgba(0,0,0,0.5); backdrop-filter: var(--glass-blur);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h3 style="font-family: var(--font-head); font-size: 20px; color: var(--primary);">Lista de Pedido</h3>
+                <button id="close-order"
+                    style="background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 20px;"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div id="order-items" style="flex: 1; overflow-y: auto; margin-bottom: 30px;">
+                <!-- Selected items here -->
+            </div>
+            <div class="order-footer" style="border-top: 1px solid var(--card-border); padding-top: 20px;">
+                <button class="smart-btn" id="btn-print-order" style="width: 100%; margin-top: 20px;">
+                    <i class="fas fa-print"></i> Imprimir / Enviar a Proveedores
+                </button>
+            </div>
+        </div>
         <section id="view-clientes" class="content-view sales-section">
             <h2 style="font-family: var(--font-head); margin-bottom: 5px;">Gestión de Clientes</h2>
             <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">

@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const views = {
         'Tablero': document.getElementById('view-dashboard'),
         'Ventas': document.getElementById('view-sales'),
-        'Clientes': document.getElementById('view-clientes')
+        'Clientes': document.getElementById('view-clientes'),
+        'Inventario': document.getElementById('view-inventario')
     };
 
     navLinks.forEach(link => {
@@ -31,10 +32,167 @@ document.addEventListener('DOMContentLoaded', () => {
                     initSalesChart();
                 } else if (viewName === 'Clientes') {
                     initClientsChart();
+                } else if (viewName === 'Inventario') {
+                    renderInventory();
                 }
             }
         });
     });
+
+    // --- Inventory Data & Logic ---
+    const inventoryData = [
+        { id: 'P-001', name: 'Pechuga de Pollo', stock: 12, min: 15, unit: 'kg', needed: 25 },
+        { id: 'V-001', name: 'Cebolla Blanca', stock: 8, min: 5, unit: 'kg', needed: 3 },
+        { id: 'C-001', name: 'Arroz Blanco', stock: 4, min: 10, unit: 'kg', needed: 15 },
+        { id: 'S-001', name: 'Sal Marina', stock: 12, min: 2, unit: 'kg', needed: 0 },
+        { id: 'E-001', name: 'Especias Curry', stock: 0.5, min: 1, unit: 'kg', needed: 2 },
+        { id: 'V-002', name: 'Tomate Chonto', stock: 5, min: 8, unit: 'kg', needed: 10 },
+        { id: 'B-001', name: 'Cerveza Artesana', stock: 24, min: 12, unit: 'und', needed: 0 },
+        { id: 'P-002', name: 'Pan Brioche', stock: 6, min: 20, unit: 'und', needed: 30 }
+    ];
+
+    let shoppingCart = [];
+
+    const inventoryGrid = document.getElementById('inventory-grid');
+    const orderCount = document.getElementById('order-count');
+    const orderPanel = document.getElementById('order-panel');
+    const orderItems = document.getElementById('order-items');
+    const inventorySearch = document.getElementById('inventory-search');
+    const inventorySort = document.getElementById('inventory-sort');
+
+    function renderInventory() {
+        if (!inventoryGrid) return;
+
+        const searchTerm = inventorySearch.value.toLowerCase();
+        const sortBy = inventorySort.value;
+
+        let filtered = inventoryData.filter(item => item.name.toLowerCase().includes(searchTerm));
+
+        // Urgency Calculation: ratio = current / min. Low ratio = high urgency.
+        if (sortBy === 'urgencia') {
+            filtered.sort((a, b) => (a.stock / a.min) - (b.stock / b.min));
+        } else if (sortBy === 'nombre') {
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortBy === 'stock') {
+            filtered.sort((a, b) => a.stock - b.stock);
+        }
+
+        inventoryGrid.innerHTML = '';
+        filtered.forEach(item => {
+            const urgencyRatio = item.stock / item.min;
+            let statusClass = 'status-ok';
+            let statusText = 'Suficiente';
+
+            if (urgencyRatio < 0.5) { statusClass = 'status-critical'; statusText = 'CRÍTICO'; }
+            else if (urgencyRatio < 1) { statusClass = 'status-warning'; statusText = 'REABASTECER'; }
+
+            const card = document.createElement('div');
+            card.className = 'kpi-card inventory-card';
+            card.style.padding = '20px';
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <span class="kpi-label" style="font-size: 10px;">${item.id}</span>
+                    <span class="status- badge ${statusClass}" style="font-size: 9px; padding: 4px 8px; border-radius: 4px; font-weight: 700;">${statusText}</span>
+                </div>
+                <h4 style="font-family: var(--font-head); font-size: 16px; margin-bottom: 15px;">${item.name}</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                    <div>
+                        <p style="font-size: 10px; color: var(--text-dim);">STOCK ACTUAL</p>
+                        <p style="font-size: 18px; font-weight: 800;">${item.stock} <small style="font-size: 10px;">${item.unit}</small></p>
+                    </div>
+                    <div>
+                        <p style="font-size: 10px; color: var(--text-dim);">DÉFICIT VENTAS</p>
+                        <p style="font-size: 18px; font-weight: 800; color: ${item.needed > 0 ? 'var(--warning)' : 'var(--text-dim)'}">+${item.needed} <small style="font-size: 10px;">${item.unit}</small></p>
+                    </div>
+                </div>
+                <button class="smart-btn" onclick="addToOrder('${item.id}')" style="width: 100%; padding: 10px; font-size: 12px;">
+                    <i class="fas fa-plus"></i> Añadir a Pedido
+                </button>
+            `;
+            inventoryGrid.appendChild(card);
+        });
+    }
+
+    if (inventorySearch) inventorySearch.addEventListener('input', renderInventory);
+    if (inventorySort) inventorySort.addEventListener('change', renderInventory);
+
+    window.addToOrder = (id) => {
+        const item = inventoryData.find(i => i.id === id);
+        if (!item) return;
+
+        const existing = shoppingCart.find(i => i.id === id);
+        if (existing) {
+            existing.qty += (item.needed || item.min);
+        } else {
+            shoppingCart.push({ ...item, qty: (item.needed || item.min) });
+        }
+        updateOrderUI();
+        logToHistory(`Añadido: ${item.name} (${item.qty} ${item.unit})`);
+    };
+
+    function updateOrderUI() {
+        orderCount.textContent = shoppingCart.length;
+        orderItems.innerHTML = '';
+        shoppingCart.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.style.padding = '15px 0';
+            div.innerHTML = `
+                <div>
+                    <p style="font-weight: 700; font-size: 13px;">${item.name}</p>
+                    <p style="font-size: 11px; color: var(--text-dim);">Sugerido: ${item.qty} ${item.unit}</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" value="${item.qty}" style="width: 60px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: white; padding: 5px; border-radius: 4px; font-size: 12px;" onchange="updateCartQty('${item.id}', this.value)">
+                    <button onclick="removeFromCart('${item.id}')" style="background: none; border: none; color: var(--danger); cursor: pointer;"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            orderItems.appendChild(div);
+        });
+    }
+
+    window.updateCartQty = (id, val) => {
+        const item = shoppingCart.find(i => i.id === id);
+        if (item) item.qty = parseFloat(val);
+    };
+
+    window.removeFromCart = (id) => {
+        shoppingCart = shoppingCart.filter(i => i.id !== id);
+        updateOrderUI();
+    };
+
+    const btnGenerateOrder = document.getElementById('btn-generate-order');
+    const closeOrder = document.getElementById('close-order');
+    const btnPrintOrder = document.getElementById('btn-print-order');
+
+    if (btnGenerateOrder) btnGenerateOrder.addEventListener('click', () => orderPanel.classList.add('active'));
+    if (closeOrder) closeOrder.addEventListener('click', () => orderPanel.classList.remove('active'));
+
+    if (btnPrintOrder) btnPrintOrder.addEventListener('click', () => {
+        if (shoppingCart.length === 0) return alert('La lista está vacía');
+
+        let report = `REPORTE DE PEDIDO - COCINA&CIA\nFecha: ${new Date().toLocaleDateString()}\n\n`;
+        shoppingCart.forEach(i => {
+            report += `- ${i.name}: ${i.qty} ${i.unit}\n`;
+        });
+
+        const win = window.open('', '_blank');
+        win.document.write(`
+            <html>
+            <head><title>Lista de Pedido</title></head>
+            <body style="font-family: sans-serif; padding: 40px; background: #fff; color: #000;">
+                <h1>COCINA&CIA | Lista de Pedido</h1>
+                <p>Fecha: ${new Date().toLocaleDateString()}</p>
+                <hr>
+                <ul>${shoppingCart.map(i => `<li><strong>${i.name}</strong>: ${i.qty} ${i.unit}</li>`).join('')}</ul>
+                <hr>
+                <p>Total items: ${shoppingCart.length}</p>
+                <script>window.print();</script>
+            </body>
+            </html>
+        `);
+    });
+
 
     // Action History Helper
     function logToHistory(text) {
