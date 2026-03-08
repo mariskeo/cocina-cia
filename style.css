@@ -295,6 +295,12 @@ body {
     overflow-y: auto;
 }
 
+.history-list {
+    list-style: none;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
 .history-item {
     padding: 10px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -542,9 +548,137 @@ body {
     color: var(--bg-dark);
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
+/* Mobile Toggle Buttons */
+.mobile-toggle,
+.sidebar-close {
+    display: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: var(--transition);
+    backdrop-filter: var(--glass-blur);
+    width: 45px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-toggle:hover,
+.sidebar-close:hover {
+    background: rgba(191, 255, 0, 0.1);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Sidebar Responsive Base */
+.sidebar {
+    transition: var(--transition);
+}
+
+/* Responsive Queries */
+@media (max-width: 1024px) {
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        z-index: 2000;
+        width: 280px;
+        background: rgba(8, 8, 8, 0.98);
+        border-right: 1px solid var(--card-border);
+        height: 100vh;
+        backdrop-filter: blur(25px);
+    }
+
+    .sidebar.active {
+        left: 0 !important;
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .mobile-toggle,
+    .sidebar-close {
+        display: flex;
+    }
+
+    .sidebar-close {
+        position: absolute;
+        top: 30px;
+        right: 25px;
+    }
+
+    .main-layout {
+        padding: 20px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .top-bar {
+        margin-bottom: 30px;
+        gap: 15px;
+    }
+
+    .ia-notif {
+        font-size: 11px;
+        padding: 10px 15px;
+        flex-grow: 1;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .kpi-row,
+    .inventory-grid,
+    .dashboard-grid,
+    .analytics-grid,
+    .cost-grid,
+    .grid-2-1,
+    .kpi-row-v2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 50px;
+    }
+
+    .user-profile {
+        width: 100%;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 10px 15px;
+        border-radius: 12px;
+    }
+
+    .ia-notif {
+        width: 100%;
+        order: 2;
+        margin-top: 10px;
+    }
+
+    .mobile-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1500;
+    }
+
+    .settings-tab-content>div {
+        grid-template-columns: 1fr !important;
+    }
+
+    .modal>div {
+        margin: 10px;
+        padding: 20px !important;
+        width: calc(100% - 20px);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .chart-container {
+        padding: 15px;
     }
 }

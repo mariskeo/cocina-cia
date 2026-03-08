@@ -45,6 +45,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Mobile Menu Toggle
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const sidebarClose = document.getElementById('sidebar-close');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+    }
+
+    if (sidebarClose) {
+        sidebarClose.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+    }
+
+    // Close sidebar on link click (mobile)
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.remove('active');
+            }
+        });
+    });
+
     // --- Inventory Data & Logic ---
     const providers = [
         "Distribuidora El Galpón (Proteínas)",
