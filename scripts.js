@@ -574,27 +574,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const smartContent = document.getElementById('smart-preorder-content');
     const btnConfirmSmart = document.getElementById('btn-confirm-smart-order');
 
+    window.handleSmartPreorder = () => {
+        console.log("handleSmartPreorder triggered");
+        const modal = document.getElementById('smart-preorder-modal');
+        if (!modal) {
+            console.error("Modal not found in DOM");
+            return;
+        }
+
+        // Cross-reference logic (Hoisted function)
+        generateSmartPreorder();
+
+        modal.style.display = 'flex';
+        console.log("Modal display set to flex");
+    };
+
     if (btnSmartPreorder) {
         btnSmartPreorder.addEventListener('click', (e) => {
             e.preventDefault();
-            console.log("Smart Pre-order button clicked"); // Hidden but good practice
             window.handleSmartPreorder();
         });
     }
-
-    window.handleSmartPreorder = () => {
-        if (typeof generateSmartPreorder === 'function') {
-            generateSmartPreorder();
-            const modal = document.getElementById('smart-preorder-modal');
-            if (modal) {
-                modal.style.display = 'block';
-            } else {
-                alert('Error: Modal de pre-pedido no encontrado en el DOM.');
-            }
-        } else {
-            alert('Error: La función generateSmartPreorder no existe.');
-        }
-    };
 
     function generateSmartPreorder() {
         // Mocking the "cross-referencing" intelligence
