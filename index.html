@@ -300,10 +300,107 @@
                 </div>
             </div>
 
-            <div class="chart-container" style="max-width: 400px; height: 320px; margin: 30px auto 0;">
+            <div class="chart-container" style="max-width: 400px; height: 320px; margin: 30px auto 40px;">
                 <h3 style="font-size: 14px; margin-bottom: 15px; color: var(--text-dim); text-align: center;">Top
                     Canales de Adquisición</h3>
                 <canvas id="clientsChart"></canvas>
+            </div>
+
+            <!-- User Archetypes Section -->
+            <div style="margin-top: 50px;">
+                <h3
+                    style="font-family: var(--font-head); font-size: 20px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-users" style="color: var(--primary);"></i> Arquetipos de Usuario
+                </h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                    <!-- Archetype 1 -->
+                    <div class="kpi-card" style="padding: 25px; border-left: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                            <div
+                                style="width: 45px; height: 45px; background: rgba(191,255,0,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <i class="fas fa-briefcase" style="font-size: 20px;"></i>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 16px; font-family: var(--font-head);">El Ejecutivo de Diario</h4>
+                                <p
+                                    style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">
+                                    Alta Recurrencia / Solo</p>
+                            </div>
+                        </div>
+                        <div style="display: grid; gap: 15px;">
+                            <div
+                                style="background: rgba(255, 77, 77, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 77, 77, 0.1);">
+                                <p
+                                    style="font-size: 10px; color: var(--danger); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">
+                                    Dolores (Pain Points)</p>
+                                <ul
+                                    style="list-style: none; font-size: 13px; display: grid; gap: 5px; color: var(--text-main);">
+                                    <li><i class="fas fa-clock" style="font-size: 10px; opacity: 0.5;"></i> Tiempos de
+                                        espera en hora pico.</li>
+                                    <li><i class="fas fa-utensils" style="font-size: 10px; opacity: 0.5;"></i> Falta de
+                                        variedad en el menú ejecutivo.</li>
+                                </ul>
+                            </div>
+                            <div
+                                style="background: rgba(51, 255, 119, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(51, 255, 119, 0.1);">
+                                <p
+                                    style="font-size: 10px; color: var(--success); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">
+                                    Deseos (Desires)</p>
+                                <ul
+                                    style="list-style: none; font-size: 13px; display: grid; gap: 5px; color: var(--text-main);">
+                                    <li><i class="fas fa-ticket-alt" style="font-size: 10px; opacity: 0.5;"></i> Planes
+                                        de suscripción prepago.</li>
+                                    <li><i class="fas fa-bolt" style="font-size: 10px; opacity: 0.5;"></i> Pedido
+                                        anticipado vía App/WhatsApp.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Archetype 2 -->
+                    <div class="kpi-card" style="padding: 25px; border-left: 4px solid var(--warning);">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                            <div
+                                style="width: 45px; height: 45px; background: rgba(255, 173, 51, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--warning);">
+                                <i class="fas fa-home" style="font-size: 20px;"></i>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 16px; font-family: var(--font-head);">El Anfitrión Familiar</h4>
+                                <p
+                                    style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">
+                                    Ticket Alto / Grupal</p>
+                            </div>
+                        </div>
+                        <div style="display: grid; gap: 15px;">
+                            <div
+                                style="background: rgba(255, 77, 77, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 77, 77, 0.1);">
+                                <p
+                                    style="font-size: 10px; color: var(--danger); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">
+                                    Dolores (Pain Points)</p>
+                                <ul
+                                    style="list-style: none; font-size: 13px; display: grid; gap: 5px; color: var(--text-main);">
+                                    <li><i class="fas fa-volume-up" style="font-size: 10px; opacity: 0.5;"></i> Ruido
+                                        excesivo para conversaciones.</li>
+                                    <li><i class="fas fa-parking" style="font-size: 10px; opacity: 0.5;"></i> Dificultad
+                                        de acceso/parqueadero.</li>
+                                </ul>
+                            </div>
+                            <div
+                                style="background: rgba(51, 255, 119, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(51, 255, 119, 0.1);">
+                                <p
+                                    style="font-size: 10px; color: var(--success); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">
+                                    Deseos (Desires)</p>
+                                <ul
+                                    style="list-style: none; font-size: 13px; display: grid; gap: 5px; color: var(--text-main);">
+                                    <li><i class="fas fa-star" style="font-size: 10px; opacity: 0.5;"></i> Menús
+                                        familiares para compartir.</li>
+                                    <li><i class="fas fa-child" style="font-size: 10px; opacity: 0.5;"></i>
+                                        Espacios/atención para niños.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <!-- Reports View -->
