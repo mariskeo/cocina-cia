@@ -240,9 +240,15 @@
                         <i class="fas fa-link"></i> Fuente: <strong>01_Market_Intelligence (stock_inventario)</strong>
                     </p>
                 </div>
-                <button class="smart-btn" id="btn-generate-order" style="width: auto; padding: 12px 25px;">
-                    <i class="fas fa-shopping-cart"></i> Generar Pedido (<span id="order-count">0</span>)
-                </button>
+                <div style="display: flex; gap: 12px;">
+                    <button class="smart-btn" id="btn-smart-preorder"
+                        style="width: auto; padding: 12px 25px; background: transparent; border: 1px dashed var(--primary); color: var(--primary);">
+                        <i class="fas fa-magic"></i> Pre-pedido Inteligente
+                    </button>
+                    <button class="smart-btn" id="btn-generate-order" style="width: auto; padding: 12px 25px;">
+                        <i class="fas fa-shopping-cart"></i> Generar Pedido (<span id="order-count">0</span>)
+                    </button>
+                </div>
             </div>
 
             <div class="inventory-controls" style="margin-bottom: 30px; display: flex; gap: 15px;">
@@ -277,6 +283,40 @@
                 <button class="smart-btn" id="btn-print-order" style="width: 100%; margin-top: 20px;">
                     <i class="fas fa-print"></i> Imprimir / Enviar a Proveedores
                 </button>
+            </div>
+        </div>
+
+        <!-- Smart Pre-order Modal -->
+        <div id="smart-preorder-modal" class="modal"
+            style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; backdrop-filter: var(--glass-blur); padding: 40px; overflow-y: auto;">
+            <div
+                style="max-width: 900px; margin: 40px auto; background: var(--bg-dark); border: 1px solid var(--card-border); border-radius: 24px; padding: 40px; position: relative;">
+                <button onclick="document.getElementById('smart-preorder-modal').style.display='none'"
+                    style="position: absolute; right: 25px; top: 25px; background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 20px;">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <header style="margin-bottom: 30px;">
+                    <h3
+                        style="font-family: var(--font-head); font-size: 24px; color: var(--primary); margin-bottom: 10px;">
+                        <i class="fas fa-magic"></i> Pre-pedido Inteligente (IA Forecast)
+                    </h3>
+                    <p style="color: var(--text-dim); font-size: 14px;">Propuesta calculada cruzando Stock (01), Ventas
+                        (04) y Recetas (02).</p>
+                </header>
+
+                <div id="smart-preorder-content" style="display: grid; gap: 30px;">
+                    <!-- Grouped items will be injected here -->
+                </div>
+
+                <div
+                    style="margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--card-border); display: flex; justify-content: flex-end; gap: 15px;">
+                    <button class="smart-btn"
+                        style="background: transparent; border: 1px solid var(--card-border); color: var(--text-dim); width: auto; padding: 12px 30px;"
+                        onclick="document.getElementById('smart-preorder-modal').style.display='none'">CANCELAR</button>
+                    <button class="smart-btn" id="btn-confirm-smart-order"
+                        style="width: auto; padding: 12px 40px;">CONFIRMAR Y ENVIAR</button>
+                </div>
             </div>
         </div>
         <section id="view-clientes" class="content-view sales-section">

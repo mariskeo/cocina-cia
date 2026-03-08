@@ -567,4 +567,102 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- Smart Pre-order Logic ---
+    const btnSmartPreorder = document.getElementById('btn-smart-preorder');
+    const smartModal = document.getElementById('smart-preorder-modal');
+    const smartContent = document.getElementById('smart-preorder-content');
+    const btnConfirmSmart = document.getElementById('btn-confirm-smart-order');
+
+    if (btnSmartPreorder) {
+        btnSmartPreorder.addEventListener('click', () => {
+            generateSmartPreorder();
+            smartModal.style.display = 'block';
+        });
+    }
+
+    function generateSmartPreorder() {
+        // Mocking the "cross-referencing" intelligence
+        // We filter items that have a deficit (item.needed > 0)
+        // and add some "IA" logic (e.g., adding a safety buffer for high-sales items)
+
+        const suggestedItems = inventoryData.filter(item => item.needed > 0).map(item => {
+            // Intelligent Buffer: +15% if it's a high-demand item (simulated)
+            const iaBuffer = Math.ceil(item.needed * 0.15);
+            return {
+                ...item,
+                suggestedQty: item.needed + iaBuffer,
+                priority: item.needed > (item.min * 2) ? 'Alta' : 'Normal'
+            };
+        });
+
+        // Group by Provider
+        const grouped = suggestedItems.reduce((acc, item) => {
+            if (!acc[item.provider]) acc[item.provider] = [];
+            acc[item.provider].push(item);
+            return acc;
+        }, {});
+
+        renderSmartPreorder(grouped);
+    }
+
+    function renderSmartPreorder(grouped) {
+        smartContent.innerHTML = '';
+
+        if (Object.keys(grouped).length === 0) {
+            smartContent.innerHTML = '<p style="text-align: center; color: var(--text-dim); padding: 40px;">No se detectaron necesidades críticas de reabastecimiento tras el cruce de datos.</p>';
+            return;
+        }
+
+        for (const provider in grouped) {
+            const groupDiv = document.createElement('div');
+            groupDiv.style.background = 'rgba(255,255,255,0.02)';
+            groupDiv.style.border = '1px solid var(--card-border)';
+            groupDiv.style.borderRadius = '16px';
+            groupDiv.style.padding = '25px';
+
+            groupDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h4 style="color: var(--primary); font-family: var(--font-head); font-size: 18px;">
+                        <i class="fas fa-truck"></i> ${provider}
+                    </h4>
+                    <span style="font-size: 11px; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px;">
+                        Canal: WhatsApp / API
+                    </span>
+                </div>
+                <div style="display: grid; gap: 15px;">
+                    ${grouped[provider].map(item => `
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 15px; align-items: center; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                            <div>
+                                <p style="font-weight: 700; font-size: 13px;">${item.name}</p>
+                                <p style="font-size: 10px; color: var(--text-dim);">Stock: ${item.stock} ${item.unit} | Sugerido: ${item.needed} + IA Buffer</p>
+                            </div>
+                            <div>
+                                <input type="number" value="${item.suggestedQty}" class="console-input" style="padding: 6px 12px; font-size: 12px; width: 80px;">
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <select class="console-input" style="padding: 6px; font-size: 11px; flex: 1;">
+                                    <option>Entrega Normal</option>
+                                    <option>Urgente (AM)</option>
+                                    <option>Consolidado Semanal</option>
+                                </select>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top: 15px;">
+                    <textarea class="console-input" placeholder="Nota para el proveedor..." style="width: 100%; height: 60px; padding: 10px; font-size: 12px; resize: none;"></textarea>
+                </div>
+            `;
+            smartContent.appendChild(groupDiv);
+        }
+    }
+
+    if (btnConfirmSmart) {
+        btnConfirmSmart.addEventListener('click', () => {
+            logToHistory("Pre-pedido IA Confirmado y Enviado");
+            smartModal.style.display = 'none';
+            alert("¡Pre-pedido inteligente enviado con éxito a los canales de proveedores!");
+        });
+    }
 });
