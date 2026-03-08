@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'Inventario': document.getElementById('view-inventario'),
         'Informes': document.getElementById('view-informes'),
         'Costos': document.getElementById('view-costos'),
-        'Configuración': document.getElementById('view-settings')
+        'Configuración': document.getElementById('view-settings'),
+        'Ajustes': document.getElementById('view-settings')
     };
 
     navLinks.forEach(link => {
