@@ -40,15 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Inventory Data & Logic ---
+    const providers = [
+        "Distribuidora El Galpón (Proteínas)",
+        "Surtifruver del Campo (Vegetales)",
+        "Abarrotes Central (Secos)",
+        "Destilería Local (Bebidas)",
+        "Panadería La Espiga (Pan)"
+    ];
+
     const inventoryData = [
-        { id: 'P-001', name: 'Pechuga de Pollo', stock: 12, min: 15, unit: 'kg', needed: 25 },
-        { id: 'V-001', name: 'Cebolla Blanca', stock: 8, min: 5, unit: 'kg', needed: 3 },
-        { id: 'C-001', name: 'Arroz Blanco', stock: 4, min: 10, unit: 'kg', needed: 15 },
-        { id: 'S-001', name: 'Sal Marina', stock: 12, min: 2, unit: 'kg', needed: 0 },
-        { id: 'E-001', name: 'Especias Curry', stock: 0.5, min: 1, unit: 'kg', needed: 2 },
-        { id: 'V-002', name: 'Tomate Chonto', stock: 5, min: 8, unit: 'kg', needed: 10 },
-        { id: 'B-001', name: 'Cerveza Artesana', stock: 24, min: 12, unit: 'und', needed: 0 },
-        { id: 'P-002', name: 'Pan Brioche', stock: 6, min: 20, unit: 'und', needed: 30 }
+        { id: 'P-001', name: 'Pechuga de Pollo', stock: 12, min: 15, unit: 'kg', needed: 25, provider: providers[0] },
+        { id: 'V-001', name: 'Cebolla Blanca', stock: 8, min: 5, unit: 'kg', needed: 3, provider: providers[1] },
+        { id: 'C-001', name: 'Arroz Blanco', stock: 4, min: 10, unit: 'kg', needed: 15, provider: providers[2] },
+        { id: 'S-001', name: 'Sal Marina', stock: 12, min: 2, unit: 'kg', needed: 0, provider: providers[2] },
+        { id: 'E-001', name: 'Especias Curry', stock: 0.5, min: 1, unit: 'kg', needed: 2, provider: providers[2] },
+        { id: 'V-002', name: 'Tomate Chonto', stock: 5, min: 8, unit: 'kg', needed: 10, provider: providers[1] },
+        { id: 'B-001', name: 'Cerveza Artesana', stock: 24, min: 12, unit: 'und', needed: 0, provider: providers[3] },
+        { id: 'P-002', name: 'Pan Brioche', stock: 6, min: 20, unit: 'und', needed: 30, provider: providers[4] }
     ];
 
     let shoppingCart = [];
@@ -92,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                     <span class="kpi-label" style="font-size: 10px;">${item.id}</span>
-                    <span class="status- badge ${statusClass}" style="font-size: 9px; padding: 4px 8px; border-radius: 4px; font-weight: 700;">${statusText}</span>
+                    <span class="status-badge ${statusClass}" style="font-size: 9px; padding: 4px 8px; border-radius: 4px; font-weight: 700;">${statusText}</span>
                 </div>
                 <h4 style="font-family: var(--font-head); font-size: 16px; margin-bottom: 15px;">${item.name}</h4>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
@@ -105,9 +113,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p style="font-size: 18px; font-weight: 800; color: ${item.needed > 0 ? 'var(--warning)' : 'var(--text-dim)'}">+${item.needed} <small style="font-size: 10px;">${item.unit}</small></p>
                     </div>
                 </div>
-                <button class="smart-btn" onclick="addToOrder('${item.id}')" style="width: 100%; padding: 10px; font-size: 12px;">
-                    <i class="fas fa-plus"></i> Añadir a Pedido
-                </button>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 10px; color: var(--text-dim); display: block; margin-bottom: 5px;">PROVEEDOR</label>
+                    <select id="prov-${item.id}" class="console-input" style="padding: 8px; font-size: 11px; width: 100%; min-height: 35px;">
+                        ${providers.map(p => `<option value="${p}" ${p === item.provider ? 'selected' : ''}>${p}</option>`).join('')}
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 10px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 10px; color: var(--text-dim); display: block; margin-bottom: 5px;">CANTIDAD</label>
+                        <input type="number" id="qty-${item.id}" value="${item.needed || item.min}" class="console-input" style="padding: 8px; font-size: 11px; width: 100%; min-height: 35px;">
+                    </div>
+                    <button class="smart-btn" onclick="handleAddToOrder('${item.id}')" style="padding: 10px 15px; font-size: 12px; height: 35px;">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
             `;
             inventoryGrid.appendChild(card);
         });
@@ -116,18 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (inventorySearch) inventorySearch.addEventListener('input', renderInventory);
     if (inventorySort) inventorySort.addEventListener('change', renderInventory);
 
-    window.addToOrder = (id) => {
+    window.handleAddToOrder = (id) => {
         const item = inventoryData.find(i => i.id === id);
-        if (!item) return;
+        const qtyInput = document.getElementById(`qty-${id}`);
+        const provSelect = document.getElementById(`prov-${id}`);
 
-        const existing = shoppingCart.find(i => i.id === id);
+        if (!item || !qtyInput || !provSelect) return;
+
+        const qty = parseFloat(qtyInput.value);
+        const provider = provSelect.value;
+
+        if (qty <= 0) return alert('La cantidad debe ser mayor a 0');
+
+        const existing = shoppingCart.find(i => i.id === id && i.provider === provider);
         if (existing) {
-            existing.qty += (item.needed || item.min);
+            existing.qty += qty;
         } else {
-            shoppingCart.push({ ...item, qty: (item.needed || item.min) });
+            shoppingCart.push({ ...item, qty: qty, provider: provider });
         }
         updateOrderUI();
-        logToHistory(`Añadido: ${item.name} (${item.qty} ${item.unit})`);
+        logToHistory(`Añadido: ${item.name} (${qty} ${item.unit} - ${provider})`);
     };
 
     function updateOrderUI() {
@@ -138,9 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
             div.className = 'history-item';
             div.style.padding = '15px 0';
             div.innerHTML = `
-                <div>
+                <div style="flex: 1;">
                     <p style="font-weight: 700; font-size: 13px;">${item.name}</p>
-                    <p style="font-size: 11px; color: var(--text-dim);">Sugerido: ${item.qty} ${item.unit}</p>
+                    <p style="font-size: 11px; color: var(--primary);">${item.provider}</p>
+                    <p style="font-size: 11px; color: var(--text-dim);">Cant: ${item.qty} ${item.unit}</p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <input type="number" value="${item.qty}" style="width: 60px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: white; padding: 5px; border-radius: 4px; font-size: 12px;" onchange="updateCartQty('${item.id}', this.value)">
@@ -184,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h1>COCINA&CIA | Lista de Pedido</h1>
                 <p>Fecha: ${new Date().toLocaleDateString()}</p>
                 <hr>
-                <ul>${shoppingCart.map(i => `<li><strong>${i.name}</strong>: ${i.qty} ${i.unit}</li>`).join('')}</ul>
+                <ul>${shoppingCart.map(i => `<li><strong>${i.name}</strong> - ${i.qty} ${i.unit}<br><small style="color: #666">Proveedor: ${i.provider}</small></li>`).join('')}</ul>
                 <hr>
                 <p>Total items: ${shoppingCart.length}</p>
                 <script>window.print();</script>
