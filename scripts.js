@@ -575,11 +575,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmSmart = document.getElementById('btn-confirm-smart-order');
 
     if (btnSmartPreorder) {
-        btnSmartPreorder.addEventListener('click', () => {
-            generateSmartPreorder();
-            smartModal.style.display = 'block';
+        btnSmartPreorder.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log("Smart Pre-order button clicked"); // Hidden but good practice
+            window.handleSmartPreorder();
         });
     }
+
+    window.handleSmartPreorder = () => {
+        if (typeof generateSmartPreorder === 'function') {
+            generateSmartPreorder();
+            const modal = document.getElementById('smart-preorder-modal');
+            if (modal) {
+                modal.style.display = 'block';
+            } else {
+                alert('Error: Modal de pre-pedido no encontrado en el DOM.');
+            }
+        } else {
+            alert('Error: La función generateSmartPreorder no existe.');
+        }
+    };
 
     function generateSmartPreorder() {
         // Mocking the "cross-referencing" intelligence
